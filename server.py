@@ -13,15 +13,18 @@ import email
 from email.header import decode_header
 from collections import deque
 
-from dotenv import load_dotenv
+from dotenv import dotenv_values
+
+# Load secrets directly from the file
+secrets = dotenv_values(".env")
+MY_EMAIL = secrets.get("CORNELL_EMAIL")
+MY_PASSWORD = secrets.get("APP_PASSWORD")
+MY_TOKEN = secrets.get("API_TOKEN")
+
+
 from mcp.server.mcpserver import MCPServer
 
-# Load .env before anything reads os.environ, so secrets are available at import time.
-load_dotenv()
 
-# The shared secret callers must present. Read once at startup; never logged or
-# returned to the caller.
-API_TOKEN = os.environ.get("API_TOKEN")
 
 mcp = MCPServer(
     name="productivity",
@@ -114,7 +117,7 @@ def get_upcoming_tasks(token: str) -> str:
    try:
         # 1. Connect to your email provider
         mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login("ap2597@cornell.edu", "hmuyjdpdaavkuufj")
+        mail.login("CORNELL_EMAIL", "APP_PASSWORD")
         mail.select("inbox")
 
         # 2. Search only for Canvas emails
@@ -154,7 +157,7 @@ def flag_action_emails(token: str) -> str:
     try:
         # 1. Connect to your email provider
         mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login("ap2597@cornell.edu", "hmuyjdpdaavkuufj")
+        mail.login("CORNELL_EMAIL", "APP_PASSWORD")
         mail.select("inbox")
 
         # 2. Search only for emails with "Action" in the subject
