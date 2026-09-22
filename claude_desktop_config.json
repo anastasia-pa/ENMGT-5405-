@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "productivity-server": {
+      "command": "uv",
+      "args": [
+        "run",
+        "server.py"
+      ],
+      "cwd": "C:\\Users\\anast\\OneDrive\\Documents\\mcp-productivity"
+    }
+  }
+}

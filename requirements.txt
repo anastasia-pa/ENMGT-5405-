@@ -1,0 +1,5 @@
+# MCP Python SDK. The [cli] extra adds `mcp dev` / `mcp install` for local testing.
+mcp[cli]==2.2.0
+
+# Loads secrets from .env into the environment.
+python-dotenv==1.2.3

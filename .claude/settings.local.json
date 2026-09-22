@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Force | Select-Object Name, Mode; Write-Output \"---uv---\"; \\(Get-Command uv -ErrorAction SilentlyContinue\\).Source; Write-Output \"---python---\"; \\(Get-Command python -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(uv --version)",
+      "PowerShell(uv python list --only-installed)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "PowerShell(uv init --name mcp-productivity --python 3.12 2>&1)",
+      "PowerShell(uv venv)",
+      "PowerShell(uv add \"mcp[cli]\" python-dotenv 2>&1)",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe -c \"import mcp, inspect, os; print\\(mcp.__file__\\); print\\(sorted\\(n for n in dir\\(mcp\\) if not n.startswith\\('_'\\)\\)\\)\")",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe _probe.py)",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe _smoke.py)",
+      "PowerShell(Remove-Item _smoke.py -Force; $out = \"\" | & uv run server.py 2>&1 | Out-String; Write-Output \"exit=$LASTEXITCODE\"; Write-Output \"output: $out\")",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe -c \"import secrets; print\\(secrets.token_urlsafe\\(32\\)\\)\")",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe -c \"import inspect,mcp; print\\(inspect.signature\\(mcp.Client.__init__\\)\\); print\\([n for n in dir\\(mcp.Client\\) if not n.startswith\\('_'\\)]\\)\")",
+      "PowerShell(Remove-Item _smoke.py -Force; $out = \"\" | & uv run server.py 2>&1 | Out-String; Write-Output \"exit=$LASTEXITCODE  output: $out\")",
+      "PowerShell(Remove-Item _smoke.py, _probe.py -Force; $out = \"\" | & uv run server.py 2>&1 | Out-String; Write-Output \"exit=$LASTEXITCODE  output: $out\"; Write-Output \"=== files ===\"; Get-ChildItem -Force -Name)",
+      "PowerShell(uv run exploit_check.py; Write-Output \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(uv run exploit_check.py --real-wait; Write-Output \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe _smoke.py; Write-Output \"EXIT=$LASTEXITCODE\")",
+      "PowerShell(Remove-Item _smoke.py -Force; $out = \"\" | & uv run server.py 2>&1 | Out-String; Write-Output \"startup exit=$LASTEXITCODE output=$out\"; Write-Output \"=== files ===\"; Get-ChildItem -Force -Name)"
+    ]
+  }
+}
