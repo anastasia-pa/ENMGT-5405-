@@ -16,6 +16,10 @@ from collections import deque
 
 from dotenv import dotenv_values
 
+# CITATION: Environment variable loading via dotenv and pathlib
+# Source: python-dotenv official documentation
+# URL: https://pypi.org/project/python-dotenv/
+
 env_path = pathlib.Path(__file__).parent / ".env"
 
 # Load secrets directly from the file
@@ -24,10 +28,11 @@ MY_EMAIL = env_secrets.get("CORNELL_EMAIL")
 MY_PASSWORD = env_secrets.get("APP_PASSWORD")
 MY_TOKEN = env_secrets.get("API_TOKEN")
 
+# CITATION: FastMCP initialization framework and tool decorators
+# Source: Model Context Protocol (MCP) Official Python SDK Documentation
+# URL: https://modelcontextprotocol.io/docs
 
 from mcp.server.mcpserver import MCPServer
-
-
 
 mcp = MCPServer(
     name="productivity",
@@ -42,6 +47,9 @@ mcp = MCPServer(
 # be an information leak (error disclosure).
 UNAUTHORIZED = "Unauthorized: Invalid token"
 
+# CITATION: Timing attack prevention using constant-time string comparison
+# Source: Python 3 Standard Library - secrets module
+# URL: https://docs.python.org/3/library/secrets.html
 
 def _is_authorized(token: str) -> bool:
     """Check a caller-supplied token against the configured API_TOKEN.
@@ -148,6 +156,10 @@ def get_upcoming_tasks(token: str) -> str:
         return f"Error connecting to email server: {str(e)} "
 
 
+# CITATION: Parsing and decoding IMAP email headers safely
+# Source: Python 3 Standard Library - email.header module
+# URL: https://docs.python.org/3/library/email.header.html
+
 @mcp.tool()
 def flag_action_emails(token: str) -> str:
     """Return recent emails that have 'Action' in the subject line."""
@@ -177,7 +189,11 @@ def flag_action_emails(token: str) -> str:
             for response_part in msg_data:
                 if isinstance(response_part, tuple):
                     msg = email.message_from_bytes(response_part[1])
-                    
+
+                    # CITATION: Parsing and decoding IMAP email headers safely
+                    # Source: Python 3 Standard Library - email.header module
+                    # URL: https://docs.python.org/3/library/email.header.html
+
                     # Safely handle emails without a subject line
                     raw_subject = msg.get("Subject")
                     if raw_subject:
