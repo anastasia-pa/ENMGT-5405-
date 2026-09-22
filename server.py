@@ -9,17 +9,20 @@ import secrets
 import time
 import imaplib
 import email 
+import pathlib
 
 from email.header import decode_header
 from collections import deque
 
 from dotenv import dotenv_values
 
+env_path = pathlib.Path(__file__).parent / ".env"
+
 # Load secrets directly from the file
-secrets = dotenv_values(".env")
-MY_EMAIL = secrets.get("CORNELL_EMAIL")
-MY_PASSWORD = secrets.get("APP_PASSWORD")
-MY_TOKEN = secrets.get("API_TOKEN")
+env_secrets = dotenv_values(env_path)
+MY_EMAIL = env_secrets.get("CORNELL_EMAIL")
+MY_PASSWORD = env_secrets.get("APP_PASSWORD")
+MY_TOKEN = env_secrets.get("API_TOKEN")
 
 
 from mcp.server.mcpserver import MCPServer
@@ -55,9 +58,9 @@ def _is_authorized(token: str) -> bool:
        guess got right. Plain `==` exits at the first differing byte, which leaks
        that via timing.
     """
-    if not API_TOKEN:
+    if not MY_TOKEN:
         return False
-    return secrets.compare_digest(token, API_TOKEN)
+    return secrets.compare_digest(token, MY_TOKEN)
 
 
 # --- Rate limiting ---------------------------------------------------------
@@ -117,7 +120,7 @@ def get_upcoming_tasks(token: str) -> str:
    try:
         # 1. Connect to your email provider
         mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login("CORNELL_EMAIL", "APP_PASSWORD")
+        mail.login(MY_EMAIL, MY_PASSWORD)
         mail.select("inbox")
 
         # 2. Search only for Canvas emails
@@ -157,7 +160,7 @@ def flag_action_emails(token: str) -> str:
     try:
         # 1. Connect to your email provider
         mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login("CORNELL_EMAIL", "APP_PASSWORD")
+        mail.login(MY_EMAIL, MY_PASSWORD)
         mail.select("inbox")
 
         # 2. Search only for emails with "Action" in the subject
